@@ -556,7 +556,7 @@ var TinCan;
                     lrs = this.recordStores[i];
 
                     results.push(
-                        lrs.saveStatement(statement, { callback: callbackWrapper })
+                        lrs.saveStatement(statement, callbackWrapper)
                     );
                 }
             }
@@ -600,7 +600,7 @@ var TinCan;
                 //
                 lrs = this.recordStores[0];
 
-                return lrs.retrieveStatement(stmtId, { callback: callback });
+                return lrs.retrieveStatement(stmtId, callback);
             }
 
             this.log("[warning] getStatement: No LRSs added yet (statement not retrieved)");
@@ -701,7 +701,7 @@ var TinCan;
                     lrs = this.recordStores[i];
 
                     results.push(
-                        lrs.saveStatement(voidingStatement, { callback: callbackWrapper })
+                        lrs.saveStatement(voidingStatement, callbackWrapper)
                     );
                 }
             }
@@ -745,7 +745,7 @@ var TinCan;
                 //
                 lrs = this.recordStores[0];
 
-                return lrs.retrieveVoidedStatement(stmtId, { callback: callback });
+                return lrs.retrieveVoidedStatement(stmtId, callback);
             }
 
             this.log("[warning] getVoidedStatement: No LRSs added yet (statement not retrieved)");
@@ -828,7 +828,7 @@ var TinCan;
                         lrs = this.recordStores[i];
 
                         results.push(
-                            lrs.saveStatements(statements, { callback: callbackWrapper })
+                            lrs.saveStatements(statements, callbackWrapper)
                         );
                     }
                 }
@@ -856,11 +856,11 @@ var TinCan;
                             <a href="TinCan.LRS.html#method_queryStatements">LRS.queryStatements</a>
                             method.
 
-            @param {Function} [cfg.callback] Function to run at completion
+        @param {Function} [callback] Function to run at completion
 
         TODO: support multiple LRSs and flag to use single
         */
-        getStatements: function (cfg) {
+        getStatements: function (cfg, callback) {
             this.log("getStatements");
             var queryCfg = {},
                 lrs,
@@ -906,11 +906,8 @@ var TinCan;
                 queryCfg = {
                     params: params
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.queryStatements(queryCfg);
+                return lrs.queryStatements(queryCfg, callback);
             }
 
             this.log("[warning] getStatements: No LRSs added yet (statements not read)");
@@ -926,9 +923,9 @@ var TinCan;
                 defaults to 'activity' property if empty
             @param {Object} [cfg.registration] Registration used in query,
                 defaults to 'registration' property if empty
-            @param {Function} [cfg.callback] Function to run with state
+        @param {Function} [callback] Function to run with state
         */
-        getState: function (key, cfg) {
+        getState: function (key, cfg, callback) {
             this.log("getState");
             var queryCfg,
                 lrs
@@ -957,11 +954,8 @@ var TinCan;
                 else if (this.registration !== null) {
                     queryCfg.registration = this.registration;
                 }
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.retrieveState(key, queryCfg);
+                return lrs.retrieveState(key, queryCfg, callback);
             }
 
             this.log("[warning] getState: No LRSs added yet (state not retrieved)");
@@ -980,10 +974,10 @@ var TinCan;
                 defaults to 'registration' property if empty
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing state
             @param {String} [cfg.contentType] Content-Type to specify in headers
-            @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used? 
-            @param {Function} [cfg.callback] Function to run with state
+            @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used?
+        @param {Function} [callback] Function to run with state
         */
-        setState: function (key, val, cfg) {
+        setState: function (key, val, cfg, callback) {
             this.log("setState");
             var queryCfg,
                 lrs
@@ -1021,11 +1015,8 @@ var TinCan;
                         queryCfg.method = "POST";
                     }
                 }
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.saveState(key, val, queryCfg);
+                return lrs.saveState(key, val, queryCfg, callback);
             }
 
             this.log("[warning] setState: No LRSs added yet (state not saved)");
@@ -1041,9 +1032,9 @@ var TinCan;
                 defaults to 'activity' property if empty
             @param {Object} [cfg.registration] Registration used in query,
                 defaults to 'registration' property if empty
-            @param {Function} [cfg.callback] Function to run with state
+        @param {Function} [callback] Function to run with state
         */
-        deleteState: function (key, cfg) {
+        deleteState: function (key, cfg, callback) {
             this.log("deleteState");
             var queryCfg,
                 lrs
@@ -1076,7 +1067,7 @@ var TinCan;
                     queryCfg.callback = cfg.callback;
                 }
 
-                return lrs.dropState(key, queryCfg);
+                return lrs.dropState(key, queryCfg, callback);
             }
 
             this.log("[warning] deleteState: No LRSs added yet (state not deleted)");
@@ -1088,9 +1079,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.activity] Activity used in query,
                 defaults to 'activity' property if empty
-            @param {Function} [cfg.callback] Function to run with activity profile
+        @param {Function} [callback] Function to run with activity profile
         */
-        getActivityProfile: function (key, cfg) {
+        getActivityProfile: function (key, cfg, callback) {
             this.log("getActivityProfile");
             var queryCfg,
                 lrs
@@ -1112,11 +1103,8 @@ var TinCan;
                 queryCfg = {
                     activity: (typeof cfg.activity !== "undefined" ? cfg.activity : this.activity)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.retrieveActivityProfile(key, queryCfg);
+                return lrs.retrieveActivityProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] getActivityProfile: No LRSs added yet (activity profile not retrieved)");
@@ -1132,9 +1120,9 @@ var TinCan;
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing profile
             @param {String} [cfg.contentType] Content-Type to specify in headers
             @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used?
-            @param {Function} [cfg.callback] Function to run with activity profile
+        @param {Function} [callback] Function to run with activity profile
         */
-        setActivityProfile: function (key, val, cfg) {
+        setActivityProfile: function (key, val, cfg, callback) {
             this.log("setActivityProfile");
             var queryCfg,
                 lrs
@@ -1156,9 +1144,6 @@ var TinCan;
                 queryCfg = {
                     activity: (typeof cfg.activity !== "undefined" ? cfg.activity : this.activity)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
                 if (typeof cfg.lastSHA1 !== "undefined") {
                     queryCfg.lastSHA1 = cfg.lastSHA1;
                 }
@@ -1169,7 +1154,7 @@ var TinCan;
                     }
                 }
 
-                return lrs.saveActivityProfile(key, val, queryCfg);
+                return lrs.saveActivityProfile(key, val, queryCfg, callback);
             }
 
             this.log("[warning] setActivityProfile: No LRSs added yet (activity profile not saved)");
@@ -1181,9 +1166,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.activity] Activity used in query,
                 defaults to 'activity' property if empty
-            @param {Function} [cfg.callback] Function to run with activity profile
+        @param {Function} [callback] Function to run with activity profile
         */
-        deleteActivityProfile: function (key, cfg) {
+        deleteActivityProfile: function (key, cfg, callback) {
             this.log("deleteActivityProfile");
             var queryCfg,
                 lrs
@@ -1205,11 +1190,8 @@ var TinCan;
                 queryCfg = {
                     activity: (typeof cfg.activity !== "undefined" ? cfg.activity : this.activity)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.dropActivityProfile(key, queryCfg);
+                return lrs.dropActivityProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] deleteActivityProfile: No LRSs added yet (activity profile not deleted)");
@@ -1221,9 +1203,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.agent] Agent used in query,
                 defaults to 'actor' property if empty
-            @param {Function} [cfg.callback] Function to run with agent profile
+        @param {Function} [callback] Function to run with agent profile
         */
-        getAgentProfile: function (key, cfg) {
+        getAgentProfile: function (key, cfg, callback) {
             this.log("getAgentProfile");
             var queryCfg,
                 lrs
@@ -1249,7 +1231,7 @@ var TinCan;
                     queryCfg.callback = cfg.callback;
                 }
 
-                return lrs.retrieveAgentProfile(key, queryCfg);
+                return lrs.retrieveAgentProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] getAgentProfile: No LRSs added yet (agent profile not retrieved)");
@@ -1265,9 +1247,9 @@ var TinCan;
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing profile
             @param {String} [cfg.contentType] Content-Type to specify in headers
             @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used?
-            @param {Function} [cfg.callback] Function to run with agent profile
+        @param {Function} [callback] Function to run with agent profile
         */
-        setAgentProfile: function (key, val, cfg) {
+        setAgentProfile: function (key, val, cfg, callback) {
             this.log("setAgentProfile");
             var queryCfg,
                 lrs
@@ -1289,9 +1271,6 @@ var TinCan;
                 queryCfg = {
                     agent: (typeof cfg.agent !== "undefined" ? cfg.agent : this.actor)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
                 if (typeof cfg.lastSHA1 !== "undefined") {
                     queryCfg.lastSHA1 = cfg.lastSHA1;
                 }
@@ -1302,7 +1281,7 @@ var TinCan;
                     }
                 }
 
-                return lrs.saveAgentProfile(key, val, queryCfg);
+                return lrs.saveAgentProfile(key, val, queryCfg, callback);
             }
 
             this.log("[warning] setAgentProfile: No LRSs added yet (agent profile not saved)");
@@ -1314,9 +1293,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.agent] Agent used in query,
                 defaults to 'actor' property if empty
-            @param {Function} [cfg.callback] Function to run with agent profile
+        @param {Function} [callback] Function to run with agent profile
         */
-        deleteAgentProfile: function (key, cfg) {
+        deleteAgentProfile: function (key, cfg, callback) {
             this.log("deleteAgentProfile");
             var queryCfg,
                 lrs
@@ -1338,11 +1317,8 @@ var TinCan;
                 queryCfg = {
                     agent: (typeof cfg.agent !== "undefined" ? cfg.agent : this.actor)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.dropAgentProfile(key, queryCfg);
+                return lrs.dropAgentProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] deleteAgentProfile: No LRSs added yet (agent profile not deleted)");
@@ -1898,14 +1874,14 @@ TinCan client library
             @param {Object} [cfg.params] Parameters to set on the querystring
             @param {String} [cfg.data] String of body content
             @param {Object} [cfg.headers] Additional headers to set in the request
-            @param {Function} [cfg.callback] Function to run at completion
-                @param {String|Null} cfg.callback.err If an error occurred, this parameter will contain the HTTP status code.
-                    If the operation succeeded, err will be null.
-                @param {Object} cfg.callback.xhr XHR object
             @param {Boolean} [cfg.ignore404] Whether 404 status codes should be considered an error
+        @param {Function} [callback] Function to run at completion
+            @param {String|Null} callback.err If an error occurred, this parameter will contain the HTTP status code.
+                If the operation succeeded, err will be null.
+            @param {Object} callback.xhr XHR object
         @return {Object} XHR if called in a synchronous way (in other words no callback)
         */
-        sendRequest: function (cfg) {
+        sendRequest: function (cfg, callback) {
             this.log("sendRequest");
             var fullUrl = this.endpoint + cfg.url,
                 headers = {},
@@ -1945,7 +1921,7 @@ TinCan client library
                 }
             }
 
-            return this._makeRequest(fullUrl, headers, cfg);
+            return this._makeRequest(fullUrl, headers, cfg, callback);
         },
 
         /**
@@ -1953,15 +1929,15 @@ TinCan client library
 
         @method about
         @param {Object} cfg Configuration object for the about request
-            @param {Function} [cfg.callback] Callback to execute upon receiving a response
             @param {Object} [cfg.params] this is needed, but can be empty
+        @param {Function} [callback] Callback to execute upon receiving a response
         @return {Object} About which holds the version, or asyncrhonously calls a specified callback
         */
-        about: function (cfg) {
+        about: function (cfg, callback) {
             this.log("about");
             var requestCfg,
-                requestResult,
-                callbackWrapper;
+                callbackWrapper,
+                requestResult;
 
             cfg = cfg || {};
 
@@ -1970,26 +1946,25 @@ TinCan client library
                 method: "GET",
                 params: {}
             };
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         result = TinCan.About.fromJSON(xhr.responseText);
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
+            requestResult = this.sendRequest(requestCfg, callbackWrapper);
 
             if (callbackWrapper) {
                 return;
             }
 
-            if (requestResult.err === null) {
+            if (!requestResult.err) {
                 requestResult.xhr = TinCan.About.fromJSON(requestResult.xhr.responseText);
             }
             return requestResult;
@@ -2002,14 +1977,12 @@ TinCan client library
         @method saveStatement
         @param {Object} TinCan.Statement to send
         @param {Object} [cfg] Configuration used when saving
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         */
-        saveStatement: function (stmt, cfg) {
+        saveStatement: function (stmt, callback) {
             this.log("saveStatement");
             var requestCfg,
                 versionedStatement;
-
-            cfg = cfg || {};
 
             try {
                 versionedStatement = stmt.asVersion( this.version );
@@ -2017,8 +1990,8 @@ TinCan client library
             catch (ex) {
                 if (this.allowFail) {
                     this.log("[warning] statement could not be serialized in version (" + this.version + "): " + ex);
-                    if (typeof cfg.callback !== "undefined") {
-                        cfg.callback(null, null);
+                    if (typeof callback !== "undefined") {
+                        callback(null, null);
                         return;
                     }
                     return {
@@ -2028,8 +2001,8 @@ TinCan client library
                 }
 
                 this.log("[error] statement could not be serialized in version (" + this.version + "): " + ex);
-                if (typeof cfg.callback !== "undefined") {
-                    cfg.callback(ex, null);
+                if (typeof callback !== "undefined") {
+                    callback(ex, null);
                     return;
                 }
                 return {
@@ -2055,11 +2028,7 @@ TinCan client library
                 requestCfg.method = "POST";
             }
 
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
-
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         },
 
         /**
@@ -2068,10 +2037,10 @@ TinCan client library
         @method retrieveStatement
         @param {String} ID of statement to retrieve
         @param {Object} [cfg] Configuration options
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         @return {Object} TinCan.Statement retrieved
         */
-        retrieveStatement: function (stmtId, cfg) {
+        retrieveStatement: function (stmtId, cfg, callback) {
             this.log("retrieveStatement");
             var requestCfg,
                 requestResult,
@@ -2086,23 +2055,22 @@ TinCan client library
                     statementId: stmtId
                 }
             };
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         result = TinCan.Statement.fromJSON(xhr.responseText);
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
-            if (! callbackWrapper) {
+            requestResult = this.sendRequest(requestCfg, callbackWrapper);
+            if (!callbackWrapper) {
                 requestResult.statement = null;
-                if (requestResult.err === null) {
+                if (!requestResult.err) {
                     requestResult.statement = TinCan.Statement.fromJSON(requestResult.xhr.responseText);
                 }
             }
@@ -2116,10 +2084,10 @@ TinCan client library
         @method retrieveVoidedStatement
         @param {String} ID of voided statement to retrieve
         @param {Object} [cfg] Configuration options
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         @return {Object} TinCan.Statement retrieved
         */
-        retrieveVoidedStatement: function (stmtId, cfg) {
+        retrieveVoidedStatement: function (stmtId, cfg, callback) {
             this.log("retrieveVoidedStatement");
             var requestCfg,
                 requestResult,
@@ -2139,23 +2107,22 @@ TinCan client library
                 requestCfg.params.voidedStatementId = stmtId;
             }
 
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         result = TinCan.Statement.fromJSON(xhr.responseText);
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
-            if (! callbackWrapper) {
+            requestResult = this.sendRequest(requestCfg, callbackWrapper);
+            if (!callbackWrapper) {
                 requestResult.statement = null;
-                if (requestResult.err === null) {
+                if (!requestResult.err) {
                     requestResult.statement = TinCan.Statement.fromJSON(requestResult.xhr.responseText);
                 }
             }
@@ -2170,9 +2137,9 @@ TinCan client library
         @method saveStatements
         @param {Array} Array of statements or objects convertable to statements
         @param {Object} [cfg] Configuration used when saving
-            @param {Function} [cfg.callback] Callback to execute on completion
+            @param {Function} [callback] Callback to execute on completion
         */
-        saveStatements: function (stmts, cfg) {
+        saveStatements: function (stmts, callback) {
             this.log("saveStatements");
             var requestCfg,
                 versionedStatement,
@@ -2180,11 +2147,9 @@ TinCan client library
                 i
             ;
 
-            cfg = cfg || {};
-
             if (stmts.length === 0) {
-                if (typeof cfg.callback !== "undefined") {
-                    cfg.callback(new Error("no statements"), null);
+                if (typeof callback !== "undefined") {
+                    callback(new Error("no statements"), null);
                     return;
                 }
                 return {
@@ -2200,8 +2165,8 @@ TinCan client library
                 catch (ex) {
                     if (this.allowFail) {
                         this.log("[warning] statement could not be serialized in version (" + this.version + "): " + ex);
-                        if (typeof cfg.callback !== "undefined") {
-                            cfg.callback(null, null);
+                        if (typeof callback !== "undefined") {
+                            callback(null, null);
                             return;
                         }
                         return {
@@ -2211,8 +2176,8 @@ TinCan client library
                     }
 
                     this.log("[error] statement could not be serialized in version (" + this.version + "): " + ex);
-                    if (typeof cfg.callback !== "undefined") {
-                        cfg.callback(ex, null);
+                    if (typeof callback !== "undefined") {
+                        callback(ex, null);
                         return;
                     }
                     return {
@@ -2231,11 +2196,8 @@ TinCan client library
                     "Content-Type": "application/json"
                 }
             };
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
 
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         },
 
         /**
@@ -2265,12 +2227,12 @@ TinCan client library
                 @param {Boolean} [cfg.params.authoritative] (Removed in 1.0.0) Get authoritative results
                 @param {Boolean} [cfg.params.sparse] (Removed in 1.0.0, use 'format' instead) Get sparse results
 
-            @param {Function} [cfg.callback] Callback to execute on completion
-                @param {String|null} cfg.callback.err Error status or null if succcess
-                @param {TinCan.StatementsResult|XHR} cfg.callback.response Receives a StatementsResult argument
+        @param {Function} [callback] Callback to execute on completion
+            @param {String|null} callback.err Error status or null if succcess
+            @param {TinCan.StatementsResult|XHR} callback.response Receives a StatementsResult argument
         @return {Object} Request result
         */
-        queryStatements: function (cfg) {
+        queryStatements: function (cfg, callback) {
             this.log("queryStatements");
             var requestCfg,
                 requestResult,
@@ -2289,8 +2251,8 @@ TinCan client library
             }
             catch (ex) {
                 this.log("[error] Query statements failed - " + ex);
-                if (typeof cfg.callback !== "undefined") {
-                    cfg.callback(ex, {});
+                if (typeof callback !== "undefined") {
+                    callback(ex, {});
                 }
 
                 return {
@@ -2299,25 +2261,24 @@ TinCan client library
                 };
             }
 
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         result = TinCan.StatementsResult.fromJSON(xhr.responseText);
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
+            requestResult = this.sendRequest(requestCfg, callbackWrapper);
             requestResult.config = requestCfg;
 
-            if (! callbackWrapper) {
+            if (!callbackWrapper) {
                 requestResult.statementsResult = null;
-                if (requestResult.err === null) {
+                if (!requestResult.err) {
                     requestResult.statementsResult = TinCan.StatementsResult.fromJSON(requestResult.xhr.responseText);
                 }
             }
@@ -2463,12 +2424,12 @@ TinCan client library
         @method moreStatements
         @param {Object} [cfg] Configuration used to query
             @param {String} [cfg.url] More URL
-            @param {Function} [cfg.callback] Callback to execute on completion
-                @param {String|null} cfg.callback.err Error status or null if succcess
-                @param {TinCan.StatementsResult|XHR} cfg.callback.response Receives a StatementsResult argument
+        @param {Function} [callback] Callback to execute on completion
+            @param {String|null} callback.err Error status or null if succcess
+            @param {TinCan.StatementsResult|XHR} callback.response Receives a StatementsResult argument
         @return {Object} Request result
         */
-        moreStatements: function (cfg) {
+        moreStatements: function (cfg, callback) {
             this.log("moreStatements: " + cfg.url);
             var requestCfg,
                 requestResult,
@@ -2482,7 +2443,7 @@ TinCan client library
             // the more URL query params so that the request can be made properly later
             parsedURL = TinCan.Utils.parseURL(cfg.url);
 
-            //Respect a more URL that is relative to either the server root 
+            //Respect a more URL that is relative to either the server root
             //or endpoint (though only the former is allowed in the spec)
             serverRoot = TinCan.Utils.getServerRoot(this.endpoint);
             if (parsedURL.path.indexOf("/statements") === 0){
@@ -2497,30 +2458,29 @@ TinCan client library
 
             requestCfg = {
                 method: "GET",
-                //For arbitrary more URLs to work, 
+                //For arbitrary more URLs to work,
                 //we need to make the URL absolute here
                 url: serverRoot + parsedURL.path,
                 params: parsedURL.params
             };
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         result = TinCan.StatementsResult.fromJSON(xhr.responseText);
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
+            requestResult = this.sendRequest(requestCfg, callbackWrapper);
             requestResult.config = requestCfg;
 
-            if (! callbackWrapper) {
+            if (!callbackWrapper) {
                 requestResult.statementsResult = null;
-                if (requestResult.err === null) {
+                if (!requestResult.err) {
                     requestResult.statementsResult = TinCan.StatementsResult.fromJSON(requestResult.xhr.responseText);
                 }
             }
@@ -2537,12 +2497,12 @@ TinCan client library
             @param {Object} cfg.activity TinCan.Activity
             @param {Object} cfg.agent TinCan.Agent
             @param {String} [cfg.registration] Registration
-            @param {Function} [cfg.callback] Callback to execute on completion
-                @param {Object|Null} cfg.callback.error
-                @param {TinCan.State|null} cfg.callback.result null if state is 404
+        @param {Function} [callback] Callback to execute on completion
+            @param {Object|Null} callback.error
+            @param {TinCan.State|null} callback.result null if state is 404
         @return {Object} TinCan.State retrieved when synchronous, or result from sendRequest
         */
-        retrieveState: function (key, cfg) {
+        retrieveState: function (key, cfg, callback) {
             this.log("retrieveState");
             var requestParams = {},
                 requestCfg = {},
@@ -2575,11 +2535,11 @@ TinCan client library
                 params: requestParams,
                 ignore404: true
             };
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         if (xhr.status === 404) {
                             result = null;
                         }
@@ -2619,15 +2579,14 @@ TinCan client library
                         }
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
-            if (! callbackWrapper) {
+            requestResult = this.sendRequest(requestCfg, callbackWrapper);
+            if (!callbackWrapper) {
                 requestResult.state = null;
-                if (requestResult.err === null && requestResult.xhr.status !== 404) {
+                if (!requestResult.err && requestResult.xhr.status !== 404) {
                     requestResult.state = new TinCan.State(
                         {
                             id: key,
@@ -2677,9 +2636,9 @@ TinCan client library
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing state
             @param {String} [cfg.contentType] Content-Type to specify in headers (defaults to 'application/octet-stream')
             @param {String} [cfg.method] Method to use. Default: PUT
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         */
-        saveState: function (key, val, cfg) {
+        saveState: function (key, val, cfg, callback) {
             this.log("saveState");
             var requestParams,
                 requestCfg;
@@ -2724,14 +2683,11 @@ TinCan client library
                     "Content-Type": cfg.contentType
                 }
             };
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
             if (typeof cfg.lastSHA1 !== "undefined" && cfg.lastSHA1 !== null) {
                 requestCfg.headers["If-Match"] = cfg.lastSHA1;
             }
 
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         },
 
         /**
@@ -2743,9 +2699,9 @@ TinCan client library
             @param {Object} [cfg.activity] TinCan.Activity
             @param {Object} [cfg.agent] TinCan.Agent
             @param {String} [cfg.registration] Registration
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         */
-        dropState: function (key, cfg) {
+        dropState: function (key, cfg, callback) {
             this.log("dropState");
             var requestParams,
                 requestCfg
@@ -2777,11 +2733,8 @@ TinCan client library
                 method: "DELETE",
                 params: requestParams
             };
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
 
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         },
 
         /**
@@ -2791,10 +2744,10 @@ TinCan client library
         @param {String} key Key of activity profile to retrieve
         @param {Object} cfg Configuration options
             @param {Object} cfg.activity TinCan.Activity
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         @return {Object} Value retrieved
         */
-        retrieveActivityProfile: function (key, cfg) {
+        retrieveActivityProfile: function (key, cfg, callback) {
             this.log("retrieveActivityProfile");
             var requestCfg = {},
                 requestResult,
@@ -2810,11 +2763,11 @@ TinCan client library
                 },
                 ignore404: true
             };
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         if (xhr.status === 404) {
                             result = null;
                         }
@@ -2853,15 +2806,14 @@ TinCan client library
                         }
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
+            requestResult = this.sendRequest(requestCfg, callbackWrapper);
             if (! callbackWrapper) {
                 requestResult.profile = null;
-                if (requestResult.err === null && requestResult.xhr.status !== 404) {
+                if (!requestResult.err && requestResult.xhr.status !== 404) {
                     requestResult.profile = new TinCan.ActivityProfile(
                         {
                             id: key,
@@ -2910,9 +2862,9 @@ TinCan client library
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing profile
             @param {String} [cfg.contentType] Content-Type to specify in headers (defaults to 'application/octet-stream')
             @param {String} [cfg.method] Method to use. Default: PUT
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         */
-        saveActivityProfile: function (key, val, cfg) {
+        saveActivityProfile: function (key, val, cfg, callback) {
             this.log("saveActivityProfile");
             var requestCfg;
 
@@ -2940,9 +2892,6 @@ TinCan client library
                     "Content-Type": cfg.contentType
                 }
             };
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
             if (typeof cfg.lastSHA1 !== "undefined" && cfg.lastSHA1 !== null) {
                 requestCfg.headers["If-Match"] = cfg.lastSHA1;
             }
@@ -2950,7 +2899,7 @@ TinCan client library
                 requestCfg.headers["If-None-Match"] = "*";
             }
 
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         },
 
         /**
@@ -2960,9 +2909,9 @@ TinCan client library
         @param {String|null} key Key of activity profile to delete, or null for all
         @param {Object} cfg Configuration options
             @param {Object} cfg.activity TinCan.Activity
-            @param {Function} [cfg.callback] Callback to execute on completion
+            @param {Function} [callback] Callback to execute on completion
         */
-        dropActivityProfile: function (key, cfg) {
+        dropActivityProfile: function (key, cfg, callback) {
             this.log("dropActivityProfile");
             var requestParams,
                 requestCfg
@@ -2978,11 +2927,8 @@ TinCan client library
                 method: "DELETE",
                 params: requestParams
             };
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
 
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         },
 
         /**
@@ -2992,10 +2938,10 @@ TinCan client library
         @param {String} key Key of agent profile to retrieve
         @param {Object} cfg Configuration options
             @param {Object} cfg.agent TinCan.Agent
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         @return {Object} Value retrieved
         */
-        retrieveAgentProfile: function (key, cfg) {
+        retrieveAgentProfile: function (key, cfg, callback) {
             this.log("retrieveAgentProfile");
             var requestCfg = {},
                 requestResult,
@@ -3017,11 +2963,11 @@ TinCan client library
                 requestCfg.url = "agents/profile";
                 requestCfg.params.agent = JSON.stringify(cfg.agent.asVersion(this.version));
             }
-            if (typeof cfg.callback !== "undefined") {
+            if (typeof callback !== "undefined") {
                 callbackWrapper = function (err, xhr) {
                     var result = xhr;
 
-                    if (err === null) {
+                    if (!err) {
                         if (xhr.status === 404) {
                             result = null;
                         }
@@ -3060,15 +3006,14 @@ TinCan client library
                         }
                     }
 
-                    cfg.callback(err, result);
+                    callback(err, result);
                 };
-                requestCfg.callback = callbackWrapper;
             }
 
-            requestResult = this.sendRequest(requestCfg);
-            if (! callbackWrapper) {
+            requestResult = this.sendRequest(requestCfg, callback);
+            if (!callbackWrapper) {
                 requestResult.profile = null;
-                if (requestResult.err === null && requestResult.xhr.status !== 404) {
+                if (!requestResult.err && requestResult.xhr.status !== 404) {
                     requestResult.profile = new TinCan.AgentProfile(
                         {
                             id: key,
@@ -3117,9 +3062,9 @@ TinCan client library
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing profile
             @param {String} [cfg.contentType] Content-Type to specify in headers (defaults to 'application/octet-stream')
             @param {String} [cfg.method] Method to use. Default: PUT
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         */
-        saveAgentProfile: function (key, val, cfg) {
+        saveAgentProfile: function (key, val, cfg, callback) {
             this.log("saveAgentProfile");
             var requestCfg;
 
@@ -3153,9 +3098,6 @@ TinCan client library
                 requestCfg.url = "agents/profile";
                 requestCfg.params.agent = JSON.stringify(cfg.agent.asVersion(this.version));
             }
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
             if (typeof cfg.lastSHA1 !== "undefined" && cfg.lastSHA1 !== null) {
                 requestCfg.headers["If-Match"] = cfg.lastSHA1;
             }
@@ -3163,7 +3105,7 @@ TinCan client library
                 requestCfg.headers["If-None-Match"] = "*";
             }
 
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         },
 
         /**
@@ -3173,9 +3115,9 @@ TinCan client library
         @param {String|null} key Key of agent profile to delete, or null for all
         @param {Object} cfg Configuration options
             @param {Object} cfg.agent TinCan.Agent
-            @param {Function} [cfg.callback] Callback to execute on completion
+        @param {Function} [callback] Callback to execute on completion
         */
-        dropAgentProfile: function (key, cfg) {
+        dropAgentProfile: function (key, cfg, callback) {
             this.log("dropAgentProfile");
             var requestParams,
                 requestCfg
@@ -3196,11 +3138,8 @@ TinCan client library
                 requestCfg.url = "agents/profile";
                 requestParams.agent = JSON.stringify(cfg.agent.asVersion(this.version));
             }
-            if (typeof cfg.callback !== "undefined") {
-                requestCfg.callback = cfg.callback;
-            }
 
-            return this.sendRequest(requestCfg);
+            return this.sendRequest(requestCfg, callback);
         }
     };
 
@@ -6719,7 +6658,7 @@ TinCan client library
         XMLHttpRequest = require("xhr2"),
         requestComplete;
 
-    requestComplete = function (xhr, cfg) {
+    requestComplete = function (xhr, cfg, callback) {
         log("requestComplete - xhr.status: " + xhr.status, LOG_SRC);
         log("requestComplete - xhr.responseText: " + xhr.responseText, LOG_SRC);
         var requestCompleteResult,
@@ -6727,8 +6666,8 @@ TinCan client library
             notFoundOk = (cfg.ignore404 && httpStatus === 404);
 
         if ((httpStatus >= 200 && httpStatus < 400) || notFoundOk) {
-            if (cfg.callback) {
-                cfg.callback(null, xhr);
+            if (callback) {
+                callback(null, xhr);
                 return;
             }
 
@@ -6749,8 +6688,8 @@ TinCan client library
         else {
             log("[warning] There was a problem communicating with the Learning Record Store. (" + httpStatus + " | " + xhr.responseText+ ")", LOG_SRC);
         }
-        if (cfg.callback) {
-            cfg.callback(httpStatus, xhr);
+        if (callback) {
+            callback(httpStatus, xhr);
         }
         return requestCompleteResult;
     };
@@ -6772,11 +6711,11 @@ TinCan client library
     // set just use a wrapped version of the node objects which is what
     // XMLHttpRequest module provides
     //
-    TinCan.LRS.prototype._makeRequest = function (fullUrl, headers, cfg) {
+    TinCan.LRS.prototype._makeRequest = function (fullUrl, headers, cfg, callback) {
         log("_makeRequest using http/https", LOG_SRC);
         var xhr,
             url = fullUrl,
-            async = typeof cfg.callback !== "undefined",
+            async = typeof callback !== "undefined",
             prop
         ;
         if (typeof cfg.params !== "undefined" && Object.keys(cfg.params).length > 0) {
@@ -6799,7 +6738,7 @@ TinCan client library
             xhr.onreadystatechange = function () {
                 log("xhr.onreadystatechange - xhr.readyState: " + xhr.readyState, LOG_SRC);
                 if (xhr.readyState === 4) {
-                    requestComplete(xhr, cfg);
+                    requestComplete(xhr, cfg, callback);
                 }
             };
         }
@@ -6810,7 +6749,7 @@ TinCan client library
             return xhr;
         }
 
-        return requestComplete(xhr, cfg);
+        return requestComplete(xhr, cfg, callback);
     };
 
     //

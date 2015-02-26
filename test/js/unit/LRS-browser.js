@@ -60,11 +60,10 @@
                     // than the content of the response itself beyond the status code
                     //
                     TinCan.Utils.getUUID(),
-                    {
-                        callback: function (err, xhr) {
-                            start();
-                            ok((err === 404 || (typeof XDomainRequest !== "undefined" && typeof xhr.status === "undefined" && err === 400)), "statement retrieve request processed successfully after an IEModeConversion");
-                        }
+                    {},
+                    function (err, xhr) {
+                        start();
+                        ok((err === 404 || (typeof XDomainRequest !== "undefined" && typeof xhr.status === "undefined" && err === 400)), "statement retrieve request processed successfully after an IEModeConversion");
                     }
                 );
             }
@@ -77,12 +76,11 @@
             function () {
                 lrs.saveStatement(
                     new TinCan.Statement(stCfg),
-                    {
-                        callback: function (err, xhr) {
-                            start();
-                            ok(err === null, "statement saved successfully after an IEModeConversion");
-                            ok((xhr.status === 204 || (typeof XDomainRequest !== "undefined" && (xhr.status === 1223 || typeof xhr.status === "undefined"))), "xhr received 204");
-                        }
+                    {},
+                    function (err, xhr) {
+                        start();
+                        ok(err === null, "statement saved successfully after an IEModeConversion");
+                        ok((xhr.status === 204 || (typeof XDomainRequest !== "undefined" && (xhr.status === 1223 || typeof xhr.status === "undefined"))), "xhr received 204");
                     }
                 );
             }
@@ -100,12 +98,12 @@
                         agent: new TinCan.Agent(stCfg.actor),
                         activity: {
                             id: "testId"
-                        },
-                        callback: function (err, xhr) {
-                            start();
-                            ok(err !== null, "saveState request was denied");
-                            ok(xhr === null, "saveState request did not return an XHR as no request was made");
                         }
+                    },
+                    function (err, xhr) {
+                        start();
+                        ok(err !== null, "saveState request was denied");
+                        ok(xhr === null, "saveState request did not return an XHR as no request was made");
                     }
                 );
             }

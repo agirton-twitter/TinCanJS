@@ -29,7 +29,7 @@ TinCan client library
         XMLHttpRequest = require("xhr2"),
         requestComplete;
 
-    requestComplete = function (xhr, cfg) {
+    requestComplete = function (xhr, cfg, callback) {
         log("requestComplete - xhr.status: " + xhr.status, LOG_SRC);
         log("requestComplete - xhr.responseText: " + xhr.responseText, LOG_SRC);
         var requestCompleteResult,
@@ -37,8 +37,8 @@ TinCan client library
             notFoundOk = (cfg.ignore404 && httpStatus === 404);
 
         if ((httpStatus >= 200 && httpStatus < 400) || notFoundOk) {
-            if (cfg.callback) {
-                cfg.callback(null, xhr);
+            if (callback) {
+                callback(null, xhr);
                 return;
             }
 
@@ -59,8 +59,8 @@ TinCan client library
         else {
             log("[warning] There was a problem communicating with the Learning Record Store. (" + httpStatus + " | " + xhr.responseText+ ")", LOG_SRC);
         }
-        if (cfg.callback) {
-            cfg.callback(httpStatus, xhr);
+        if (callback) {
+            callback(httpStatus, xhr);
         }
         return requestCompleteResult;
     };
@@ -82,11 +82,11 @@ TinCan client library
     // set just use a wrapped version of the node objects which is what
     // XMLHttpRequest module provides
     //
-    TinCan.LRS.prototype._makeRequest = function (fullUrl, headers, cfg) {
+    TinCan.LRS.prototype._makeRequest = function (fullUrl, headers, cfg, callback) {
         log("_makeRequest using http/https", LOG_SRC);
         var xhr,
             url = fullUrl,
-            async = typeof cfg.callback !== "undefined",
+            async = typeof callback !== "undefined",
             prop
         ;
         if (typeof cfg.params !== "undefined" && Object.keys(cfg.params).length > 0) {
@@ -109,7 +109,7 @@ TinCan client library
             xhr.onreadystatechange = function () {
                 log("xhr.onreadystatechange - xhr.readyState: " + xhr.readyState, LOG_SRC);
                 if (xhr.readyState === 4) {
-                    requestComplete(xhr, cfg);
+                    requestComplete(xhr, cfg, callback);
                 }
             };
         }
@@ -120,7 +120,7 @@ TinCan client library
             return xhr;
         }
 
-        return requestComplete(xhr, cfg);
+        return requestComplete(xhr, cfg, callback);
     };
 
     //

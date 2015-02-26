@@ -208,30 +208,28 @@
             asyncTest(
                 "LRS about async exception: allowFail false (" + lrs.version + ")",
                 function () {
-                    var result = lrs.about(
-                        {
-                            callback: function (err, xhr) {
-                                var i;
-                                start();
-                                ok(typeof err !== "undefined", "callback: has err argument");
-                                ok(typeof xhr !== "undefined", "callback: has xhr argument");
+                    var result = lrs.about({},
+                        function (err, xhr) {
+                            var i;
+                            start();
+                            ok(typeof err !== "undefined", "callback: has err argument");
+                            ok(typeof xhr !== "undefined", "callback: has xhr argument");
 
-                                // Do not allow the call to fail
-                                ok(err === null, "callback err: is null");
-                                ok(xhr instanceof TinCan.About, "callback: xhr is TinCan.About");
-                                ok(xhr.hasOwnProperty("version"), "callback: xhr has field 'version'");
+                            // Do not allow the call to fail
+                            ok(err === null, "callback err: is null");
+                            ok(xhr instanceof TinCan.About, "callback: xhr is TinCan.About");
+                            ok(xhr.hasOwnProperty("version"), "callback: xhr has field 'version'");
 
-                                //
-                                // IE8 didn't support .indexOf, so we are just skipping this test in that browser
-                                // or any that doesn't have .indexOf
-                                //
-                                if (typeof Array.prototype.indexOf !== "undefined") {
-                                    // Will break if suite is ran against a version not
-                                    // supported by this library
-                                    for (i = 0; i < xhr.version.length; i += 1) {
-                                        ok(TinCan.versions().indexOf(xhr.version[i]) !== -1,
-                                            "callback: xhr.version has valid version (" + xhr.version[i] + ")");
-                                    }
+                            //
+                            // IE8 didn't support .indexOf, so we are just skipping this test in that browser
+                            // or any that doesn't have .indexOf
+                            //
+                            if (typeof Array.prototype.indexOf !== "undefined") {
+                                // Will break if suite is ran against a version not
+                                // supported by this library
+                                for (i = 0; i < xhr.version.length; i += 1) {
+                                    ok(TinCan.versions().indexOf(xhr.version[i]) !== -1,
+                                        "callback: xhr.version has valid version (" + xhr.version[i] + ")");
                                 }
                             }
                         }
@@ -245,13 +243,11 @@
             asyncTest(
                 "LRS about async exception: allowFail true (" + lrs.version + ")",
                 function () {
-                    var result = lrs.about(
-                        {
-                            callback: function (err, xhr) {
-                                start();
-                                ok(typeof err !== "undefined", "callback: err argument exists");
-                                ok(typeof xhr !== "undefined", "callback: xhr argument exists");
-                            }
+                    var result = lrs.about({},
+                        function (err, xhr) {
+                            start();
+                            ok(typeof err !== "undefined", "callback: err argument exists");
+                            ok(typeof xhr !== "undefined", "callback: xhr argument exists");
                         }
                     );
                     ok(typeof result === "undefined", "async result is not undefined");
@@ -381,18 +377,17 @@
                 function () {
                     var result = lrs.saveStatement(
                         st,
-                        {
-                            callback: function (err, xhr) {
-                                start();
-                                ok(typeof err !== "undefined", "callback: has err argument");
-                                ok(typeof xhr !== "undefined", "callback: has xhr argument");
+                        {},
+                        function (err, xhr) {
+                            start();
+                            ok(typeof err !== "undefined", "callback: has err argument");
+                            ok(typeof xhr !== "undefined", "callback: has xhr argument");
 
-                                if (typeof err !== "undefined") {
-                                    ok(err instanceof Error, "callback err: is Error");
-                                }
-                                if (typeof err !== "undefined") {
-                                    ok(xhr === null, "callback xhr is null");
-                                }
+                            if (typeof err !== "undefined") {
+                                ok(err instanceof Error, "callback err: is Error");
+                            }
+                            if (typeof err !== "undefined") {
+                                ok(xhr === null, "callback xhr is null");
                             }
                         }
                     );
@@ -407,12 +402,11 @@
                 function () {
                     var result = lrs.saveStatement(
                         st,
-                        {
-                            callback: function (err, xhr) {
-                                start();
-                                ok(err === null, "callback err argument is null");
-                                ok(xhr === null, "callback xhr argument is null");
-                            }
+                        {},
+                        function (err, xhr) {
+                            start();
+                            ok(err === null, "callback err argument is null");
+                            ok(xhr === null, "callback xhr argument is null");
                         }
                     );
                     ok(typeof result === "undefined", "result is undefined");
@@ -451,18 +445,17 @@
                 function () {
                     var result = lrs.saveStatements(
                         sts,
-                        {
-                            callback: function (err, xhr) {
-                                start();
-                                ok(typeof err !== "undefined", "callback: has err argument");
-                                ok(typeof xhr !== "undefined", "callback: has xhr argument");
+                        {},
+                        function (err, xhr) {
+                            start();
+                            ok(typeof err !== "undefined", "callback: has err argument");
+                            ok(typeof xhr !== "undefined", "callback: has xhr argument");
 
-                                if (typeof err !== "undefined") {
-                                    ok(err instanceof Error, "callback err: is Error");
-                                }
-                                if (typeof err !== "undefined") {
-                                    ok(xhr === null, "callback xhr is null");
-                                }
+                            if (typeof err !== "undefined") {
+                                ok(err instanceof Error, "callback err: is Error");
+                            }
+                            if (typeof err !== "undefined") {
+                                ok(xhr === null, "callback xhr is null");
                             }
                         }
                     );
@@ -477,12 +470,11 @@
                 function () {
                     var result = lrs.saveStatements(
                         sts,
-                        {
-                            callback: function (err, xhr) {
-                                start();
-                                ok(err === null, "callback err argument is null");
-                                ok(xhr === null, "callback xhr argument is null");
-                            }
+                        {},
+                        function (err, xhr) {
+                            start();
+                            ok(err === null, "callback err argument is null");
+                            ok(xhr === null, "callback xhr argument is null");
                         }
                     );
                     ok(typeof result === "undefined", "result is undefined");

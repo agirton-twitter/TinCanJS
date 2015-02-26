@@ -427,7 +427,7 @@ var TinCan;
                     lrs = this.recordStores[i];
 
                     results.push(
-                        lrs.saveStatement(statement, { callback: callbackWrapper })
+                        lrs.saveStatement(statement, callbackWrapper)
                     );
                 }
             }
@@ -471,7 +471,7 @@ var TinCan;
                 //
                 lrs = this.recordStores[0];
 
-                return lrs.retrieveStatement(stmtId, { callback: callback });
+                return lrs.retrieveStatement(stmtId, callback);
             }
 
             this.log("[warning] getStatement: No LRSs added yet (statement not retrieved)");
@@ -572,7 +572,7 @@ var TinCan;
                     lrs = this.recordStores[i];
 
                     results.push(
-                        lrs.saveStatement(voidingStatement, { callback: callbackWrapper })
+                        lrs.saveStatement(voidingStatement, callbackWrapper)
                     );
                 }
             }
@@ -616,7 +616,7 @@ var TinCan;
                 //
                 lrs = this.recordStores[0];
 
-                return lrs.retrieveVoidedStatement(stmtId, { callback: callback });
+                return lrs.retrieveVoidedStatement(stmtId, callback);
             }
 
             this.log("[warning] getVoidedStatement: No LRSs added yet (statement not retrieved)");
@@ -699,7 +699,7 @@ var TinCan;
                         lrs = this.recordStores[i];
 
                         results.push(
-                            lrs.saveStatements(statements, { callback: callbackWrapper })
+                            lrs.saveStatements(statements, callbackWrapper)
                         );
                     }
                 }
@@ -727,11 +727,11 @@ var TinCan;
                             <a href="TinCan.LRS.html#method_queryStatements">LRS.queryStatements</a>
                             method.
 
-            @param {Function} [cfg.callback] Function to run at completion
+        @param {Function} [callback] Function to run at completion
 
         TODO: support multiple LRSs and flag to use single
         */
-        getStatements: function (cfg) {
+        getStatements: function (cfg, callback) {
             this.log("getStatements");
             var queryCfg = {},
                 lrs,
@@ -777,11 +777,8 @@ var TinCan;
                 queryCfg = {
                     params: params
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.queryStatements(queryCfg);
+                return lrs.queryStatements(queryCfg, callback);
             }
 
             this.log("[warning] getStatements: No LRSs added yet (statements not read)");
@@ -797,9 +794,9 @@ var TinCan;
                 defaults to 'activity' property if empty
             @param {Object} [cfg.registration] Registration used in query,
                 defaults to 'registration' property if empty
-            @param {Function} [cfg.callback] Function to run with state
+        @param {Function} [callback] Function to run with state
         */
-        getState: function (key, cfg) {
+        getState: function (key, cfg, callback) {
             this.log("getState");
             var queryCfg,
                 lrs
@@ -828,11 +825,8 @@ var TinCan;
                 else if (this.registration !== null) {
                     queryCfg.registration = this.registration;
                 }
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.retrieveState(key, queryCfg);
+                return lrs.retrieveState(key, queryCfg, callback);
             }
 
             this.log("[warning] getState: No LRSs added yet (state not retrieved)");
@@ -851,10 +845,10 @@ var TinCan;
                 defaults to 'registration' property if empty
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing state
             @param {String} [cfg.contentType] Content-Type to specify in headers
-            @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used? 
-            @param {Function} [cfg.callback] Function to run with state
+            @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used?
+        @param {Function} [callback] Function to run with state
         */
-        setState: function (key, val, cfg) {
+        setState: function (key, val, cfg, callback) {
             this.log("setState");
             var queryCfg,
                 lrs
@@ -892,11 +886,8 @@ var TinCan;
                         queryCfg.method = "POST";
                     }
                 }
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.saveState(key, val, queryCfg);
+                return lrs.saveState(key, val, queryCfg, callback);
             }
 
             this.log("[warning] setState: No LRSs added yet (state not saved)");
@@ -912,9 +903,9 @@ var TinCan;
                 defaults to 'activity' property if empty
             @param {Object} [cfg.registration] Registration used in query,
                 defaults to 'registration' property if empty
-            @param {Function} [cfg.callback] Function to run with state
+        @param {Function} [callback] Function to run with state
         */
-        deleteState: function (key, cfg) {
+        deleteState: function (key, cfg, callback) {
             this.log("deleteState");
             var queryCfg,
                 lrs
@@ -947,7 +938,7 @@ var TinCan;
                     queryCfg.callback = cfg.callback;
                 }
 
-                return lrs.dropState(key, queryCfg);
+                return lrs.dropState(key, queryCfg, callback);
             }
 
             this.log("[warning] deleteState: No LRSs added yet (state not deleted)");
@@ -959,9 +950,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.activity] Activity used in query,
                 defaults to 'activity' property if empty
-            @param {Function} [cfg.callback] Function to run with activity profile
+        @param {Function} [callback] Function to run with activity profile
         */
-        getActivityProfile: function (key, cfg) {
+        getActivityProfile: function (key, cfg, callback) {
             this.log("getActivityProfile");
             var queryCfg,
                 lrs
@@ -983,11 +974,8 @@ var TinCan;
                 queryCfg = {
                     activity: (typeof cfg.activity !== "undefined" ? cfg.activity : this.activity)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.retrieveActivityProfile(key, queryCfg);
+                return lrs.retrieveActivityProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] getActivityProfile: No LRSs added yet (activity profile not retrieved)");
@@ -1003,9 +991,9 @@ var TinCan;
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing profile
             @param {String} [cfg.contentType] Content-Type to specify in headers
             @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used?
-            @param {Function} [cfg.callback] Function to run with activity profile
+        @param {Function} [callback] Function to run with activity profile
         */
-        setActivityProfile: function (key, val, cfg) {
+        setActivityProfile: function (key, val, cfg, callback) {
             this.log("setActivityProfile");
             var queryCfg,
                 lrs
@@ -1027,9 +1015,6 @@ var TinCan;
                 queryCfg = {
                     activity: (typeof cfg.activity !== "undefined" ? cfg.activity : this.activity)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
                 if (typeof cfg.lastSHA1 !== "undefined") {
                     queryCfg.lastSHA1 = cfg.lastSHA1;
                 }
@@ -1040,7 +1025,7 @@ var TinCan;
                     }
                 }
 
-                return lrs.saveActivityProfile(key, val, queryCfg);
+                return lrs.saveActivityProfile(key, val, queryCfg, callback);
             }
 
             this.log("[warning] setActivityProfile: No LRSs added yet (activity profile not saved)");
@@ -1052,9 +1037,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.activity] Activity used in query,
                 defaults to 'activity' property if empty
-            @param {Function} [cfg.callback] Function to run with activity profile
+        @param {Function} [callback] Function to run with activity profile
         */
-        deleteActivityProfile: function (key, cfg) {
+        deleteActivityProfile: function (key, cfg, callback) {
             this.log("deleteActivityProfile");
             var queryCfg,
                 lrs
@@ -1076,11 +1061,8 @@ var TinCan;
                 queryCfg = {
                     activity: (typeof cfg.activity !== "undefined" ? cfg.activity : this.activity)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.dropActivityProfile(key, queryCfg);
+                return lrs.dropActivityProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] deleteActivityProfile: No LRSs added yet (activity profile not deleted)");
@@ -1092,9 +1074,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.agent] Agent used in query,
                 defaults to 'actor' property if empty
-            @param {Function} [cfg.callback] Function to run with agent profile
+        @param {Function} [callback] Function to run with agent profile
         */
-        getAgentProfile: function (key, cfg) {
+        getAgentProfile: function (key, cfg, callback) {
             this.log("getAgentProfile");
             var queryCfg,
                 lrs
@@ -1120,7 +1102,7 @@ var TinCan;
                     queryCfg.callback = cfg.callback;
                 }
 
-                return lrs.retrieveAgentProfile(key, queryCfg);
+                return lrs.retrieveAgentProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] getAgentProfile: No LRSs added yet (agent profile not retrieved)");
@@ -1136,9 +1118,9 @@ var TinCan;
             @param {String} [cfg.lastSHA1] SHA1 of the previously seen existing profile
             @param {String} [cfg.contentType] Content-Type to specify in headers
             @param {Boolean} [cfg.overwriteJSON] If the Content-Type is JSON, should a PUT be used?
-            @param {Function} [cfg.callback] Function to run with agent profile
+        @param {Function} [callback] Function to run with agent profile
         */
-        setAgentProfile: function (key, val, cfg) {
+        setAgentProfile: function (key, val, cfg, callback) {
             this.log("setAgentProfile");
             var queryCfg,
                 lrs
@@ -1160,9 +1142,6 @@ var TinCan;
                 queryCfg = {
                     agent: (typeof cfg.agent !== "undefined" ? cfg.agent : this.actor)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
                 if (typeof cfg.lastSHA1 !== "undefined") {
                     queryCfg.lastSHA1 = cfg.lastSHA1;
                 }
@@ -1173,7 +1152,7 @@ var TinCan;
                     }
                 }
 
-                return lrs.saveAgentProfile(key, val, queryCfg);
+                return lrs.saveAgentProfile(key, val, queryCfg, callback);
             }
 
             this.log("[warning] setAgentProfile: No LRSs added yet (agent profile not saved)");
@@ -1185,9 +1164,9 @@ var TinCan;
         @param {Object} [cfg] Configuration for request
             @param {Object} [cfg.agent] Agent used in query,
                 defaults to 'actor' property if empty
-            @param {Function} [cfg.callback] Function to run with agent profile
+        @param {Function} [callback] Function to run with agent profile
         */
-        deleteAgentProfile: function (key, cfg) {
+        deleteAgentProfile: function (key, cfg, callback) {
             this.log("deleteAgentProfile");
             var queryCfg,
                 lrs
@@ -1209,11 +1188,8 @@ var TinCan;
                 queryCfg = {
                     agent: (typeof cfg.agent !== "undefined" ? cfg.agent : this.actor)
                 };
-                if (typeof cfg.callback !== "undefined") {
-                    queryCfg.callback = cfg.callback;
-                }
 
-                return lrs.dropAgentProfile(key, queryCfg);
+                return lrs.dropAgentProfile(key, queryCfg, callback);
             }
 
             this.log("[warning] deleteAgentProfile: No LRSs added yet (agent profile not deleted)");

@@ -90,12 +90,12 @@
             var result = session.sendRequest(
                 {
                     url: "test",
-                    callback: function (err, xhr) {
-                        start();
-                        deepEqual(err, 0, "err arg value");
-                        TinCanTest.assertHttpRequestType(xhr, "xhr arg value");
-                        deepEqual(mockAlerts, ["[warning] There was a problem communicating with the Learning Record Store. Aborted, offline, or invalid CORS endpoint (0)"], "caught alert: 0");
-                    }
+                },
+                function (err, xhr) {
+                    start();
+                    deepEqual(err, 0, "err arg value");
+                    TinCanTest.assertHttpRequestType(xhr, "xhr arg value");
+                    deepEqual(mockAlerts, ["[warning] There was a problem communicating with the Learning Record Store. Aborted, offline, or invalid CORS endpoint (0)"], "caught alert: 0");
                 }
             );
         }
@@ -108,12 +108,12 @@
             var result = session.sendRequest(
                 {
                     url: "test",
-                    callback: function (err, xhr) {
-                        start();
-                        deepEqual(err, 0, "err arg value");
-                        TinCanTest.assertHttpRequestType(xhr, "xhr arg value");
-                        deepEqual(mockAlerts, [], "no alerts since turned off");
-                    }
+                },
+                function(err, xhr) {
+                    start();
+                    deepEqual(err, 0, "err arg value");
+                    TinCanTest.assertHttpRequestType(xhr, "xhr arg value");
+                    deepEqual(mockAlerts, [], "no alerts since turned off");
                 }
             );
         }
