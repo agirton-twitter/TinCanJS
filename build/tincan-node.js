@@ -612,11 +612,11 @@ var TinCan;
 
         @method voidStatement
         @param {TinCan.Statement|String} statement Statement or statement ID to void
-        @param {Function} [callback] Callback function to execute on completion
         @param {Object} [options] Options used to build voiding statement
+        @param {Function} [callback] Callback function to execute on completion
             @param {TinCan.Agent} [options.actor] Agent to be used as 'actor' in voiding statement
         */
-        voidStatement: function (stmt, callback, options) {
+        voidStatement: function (stmt, options, callback) {
             this.log("voidStatement");
 
             // would prefer to use .bind instead of 'self'
